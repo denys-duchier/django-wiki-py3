@@ -15,4 +15,4 @@ class ArticleMarkdown(markdown.Markdown):
 
 def article_markdown(text, article, *args, **kwargs):
     md = ArticleMarkdown(article, *args, **kwargs)
-    return md.convert(unicode(text))
+    return md.convert(str(text))

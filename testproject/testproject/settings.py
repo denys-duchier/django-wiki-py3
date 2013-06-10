@@ -146,7 +146,7 @@ WIKI_ANONYMOUS_CREATE = False
 # Do not user /accounts/profile as default
 LOGIN_REDIRECT_URL = "/"
 
-from settings_local import *
+from .settings_local import *
 
 try:
     import debug_toolbar #@UnusedImport

@@ -5,8 +5,8 @@ from django.core.exceptions import ImproperlyConfigured
 import warnings
 
 # TODO: Don't use wildcards
-from article import *
-from urlpath import *
+from .article import *
+from .urlpath import *
 
 # TODO: Should the below stuff be executed a more logical place?
 
@@ -66,7 +66,7 @@ def reverse(*args, **kwargs):
     return the result of calling reverse._transform_url(reversed_url)
     for every url in the wiki namespace.
     """
-    if isinstance(args[0], basestring) and args[0].startswith('wiki:'):
+    if isinstance(args[0], str) and args[0].startswith('wiki:'):
         url_kwargs = kwargs.get('kwargs', {})
         path = url_kwargs.get('path', False)
         # If a path is supplied then discard the article_id

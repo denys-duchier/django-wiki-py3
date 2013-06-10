@@ -50,7 +50,7 @@ class PluginSidebarFormMixin(forms.ModelForm):
         pass
 
 class PluginSettingsFormMixin(object):    
-    settings_form_headline = _(u'Settings for plugin')
+    settings_form_headline = _('Settings for plugin')
     settings_order = 1
     settings_write_access = False
     

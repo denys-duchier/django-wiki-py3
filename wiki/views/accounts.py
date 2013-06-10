@@ -45,7 +45,7 @@ class Signup(CreateView):
         return context
     
     def get_success_url(self, *args):
-        messages.success(self.request, _(u'You are now signed up... and now you can sign in!'))
+        messages.success(self.request, _('You are now signed up... and now you can sign in!'))
         return reverse("wiki:login")
 
 
@@ -58,7 +58,7 @@ class Logout(View):
 
     def get(self, request, *args, **kwargs):
         auth_logout(request)
-        messages.info(request, _(u"You are no longer logged in. Bye bye!"))
+        messages.info(request, _("You are no longer logged in. Bye bye!"))
         return redirect("wiki:root")
 
 
@@ -91,7 +91,7 @@ class Login(FormView):
     
     def form_valid(self, form, *args, **kwargs):
         auth_login(self.request, form.get_user())
-        messages.info(self.request, _(u"You are now logged in! Have fun!"))
+        messages.info(self.request, _("You are now logged in! Have fun!"))
         if self.request.GET.get("next", None):
             return redirect(self.request.GET['next'])
         if django_settings.LOGIN_REDIRECT_URL:

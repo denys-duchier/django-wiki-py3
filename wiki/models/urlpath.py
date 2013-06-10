@@ -37,11 +37,11 @@ class URLPath(MPTTModel):
     
     # Do NOT modify this field - it is updated with signals whenever ArticleForObject is changed.
     article = models.ForeignKey(Article, on_delete=models.CASCADE, editable=False,
-                                verbose_name=_(u'Cache lookup value for articles'))
+                                verbose_name=_('Cache lookup value for articles'))
     
     SLUG_MAX_LENGTH = 50
     
-    slug = models.SlugField(verbose_name=_(u'slug'), null=True, blank=True,
+    slug = models.SlugField(verbose_name=_('slug'), null=True, blank=True,
                             max_length=SLUG_MAX_LENGTH)
     site = models.ForeignKey(Site)
     parent = TreeForeignKey('self', null=True, blank=True, related_name='children')    
@@ -83,7 +83,7 @@ class URLPath(MPTTModel):
     def path(self):
         if not self.parent: return ""
         
-        ancestors = filter(lambda ancestor: ancestor.parent is not None, self.cached_ancestors)
+        ancestors = [ancestor for ancestor in self.cached_ancestors if ancestor.parent is not None]
         slugs = [obj.slug if obj.slug else "" for obj in ancestors + [self] ]
         
         return "/".join(slugs) + "/"
@@ -108,7 +108,7 @@ class URLPath(MPTTModel):
         """
         try:
             for descendant in self.get_descendants(include_self=True).order_by("-level"):
-                print "deleting " , descendant
+                print("deleting " , descendant)
                 descendant.article.delete()
             
             transaction.commit()
@@ -138,7 +138,7 @@ class URLPath(MPTTModel):
     
     def __unicode__(self):
         path = self.path
-        return path if path else ugettext(u"(root)")
+        return path if path else ugettext("(root)")
     
     def save(self, *args, **kwargs):
         super(URLPath, self).save(*args, **kwargs)
@@ -148,19 +148,19 @@ class URLPath(MPTTModel):
         super(URLPath, self).delete(*args, **kwargs)
     
     class Meta:
-        verbose_name = _(u'URL path')
-        verbose_name_plural = _(u'URL paths')
+        verbose_name = _('URL path')
+        verbose_name_plural = _('URL paths')
         unique_together = ('site', 'parent', 'slug')
         app_label = settings.APP_LABEL
     
     def clean(self, *args, **kwargs):
         if self.slug and not self.parent:
-            raise ValidationError(_(u'Sorry but you cannot have a root article with a slug.'))
+            raise ValidationError(_('Sorry but you cannot have a root article with a slug.'))
         if not self.slug and self.parent:
-            raise ValidationError(_(u'A non-root note must always have a slug.'))
+            raise ValidationError(_('A non-root note must always have a slug.'))
         if not self.parent:
             if URLPath.objects.root_nodes().filter(site=self.site).exclude(id=self.id):
-                raise ValidationError(_(u'There is already a root node on %s') % self.site)
+                raise ValidationError(_('There is already a root node on %s') % self.site)
         super(URLPath, self).clean(*args, **kwargs)
     
     @classmethod
@@ -278,10 +278,10 @@ def on_article_delete(instance, *args, **kwargs):
                               other_read = False,
                               other_write = False)
             article.add_revision(ArticleRevision(
-                     content=_(u'Articles who lost their parents\n'
+                     content=_('Articles who lost their parents\n'
                                 '===============================\n\n'
                                 'The children of this article have had their parents deleted. You should probably find a new home for them.'),
-                     title=_(u"Lost and found")))
+                     title=_("Lost and found")))
             ns.lost_and_found = URLPath.objects.create(slug=settings.LOST_AND_FOUND_SLUG,
                                                     parent=URLPath.root(),
                                                     site=site,

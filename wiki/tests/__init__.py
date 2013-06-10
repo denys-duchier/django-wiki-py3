@@ -63,10 +63,10 @@ class WebClientTest(TestCase):
     
     def dump_db_status(self, message=''):
         """Debug printing of the complete important database content."""
-        print('*** db status *** {}'.format(message))
+        print(('*** db status *** {}'.format(message)))
         from wiki.models import Article, ArticleRevision, URLPath
         for klass in (Article, ArticleRevision, URLPath):
-            print('* {} *'.format(klass.__name__))
+            print(('* {} *'.format(klass.__name__)))
             pprint.pprint(list(klass.objects.values()), width=240)
 
 

@@ -20,12 +20,12 @@ class Attachment(ReusablePlugin):
     objects = managers.ArticleFkManager()
 
     current_revision = models.OneToOneField('AttachmentRevision', 
-                                            verbose_name=_(u'current revision'),
+                                            verbose_name=_('current revision'),
                                             blank=True, null=True, related_name='current_set',
-                                            help_text=_(u'The revision of this attachment currently in use (on all articles using the attachment)'),
+                                            help_text=_('The revision of this attachment currently in use (on all articles using the attachment)'),
                                             )
     
-    original_filename = models.CharField(max_length=256, verbose_name=_(u'original filename'), blank=True, null=True)
+    original_filename = models.CharField(max_length=256, verbose_name=_('original filename'), blank=True, null=True)
 
     def can_write(self, user):
         if not settings.ANONYMOUS and (not user or user.is_anonymous()):
@@ -36,8 +36,8 @@ class Attachment(ReusablePlugin):
         return self.can_write(user)
     
     class Meta:
-        verbose_name = _(u'attachment')
-        verbose_name_plural = _(u'attachments')
+        verbose_name = _('attachment')
+        verbose_name_plural = _('attachments')
         app_label = settings.APP_LABEL 
     
     def __unicode__(self):
@@ -49,7 +49,7 @@ def extension_allowed(filename):
     except IndexError:
         # No extension
         raise IllegalFileExtension("No file extension found in filename. That's not okay!")
-    if not extension.lower() in map(lambda x: x.lower(), settings.FILE_EXTENSIONS):
+    if not extension.lower() in [x.lower() for x in settings.FILE_EXTENSIONS]:
         raise IllegalFileExtension("The following filename is illegal: %s. Extension has to be one of %s" % 
                                    (filename, ", ".join(settings.FILE_EXTENSIONS)))
     
@@ -87,14 +87,14 @@ class AttachmentRevision(BaseRevisionMixin, models.Model):
 
     file = models.FileField(upload_to=upload_path, #@ReservedAssignment
                             max_length=255,
-                            verbose_name=_(u'file'),
+                            verbose_name=_('file'),
                             storage=settings.STORAGE_BACKEND)
         
     description = models.TextField(blank=True)
     
     class Meta:
-        verbose_name = _(u'attachment revision')
-        verbose_name_plural = _(u'attachment revisions')
+        verbose_name = _('attachment revision')
+        verbose_name_plural = _('attachment revisions')
         ordering = ('created',)
         get_latest_by = ('revision_number',)
         app_label = settings.APP_LABEL
@@ -132,7 +132,8 @@ class AttachmentRevision(BaseRevisionMixin, models.Model):
                 previous_revision = self.attachment.attachmentrevision_set.latest()
                 self.revision_number = previous_revision.revision_number + 1
             # NB! The above should not raise the below exception, but somehow it does.
-            except AttachmentRevision.DoesNotExist, Attachment.DoesNotExist:
+            except AttachmentRevision.DoesNotExist as xxx_todo_changeme:
+                Attachment.DoesNotExist = xxx_todo_changeme
                 self.revision_number = 1
         
         super(AttachmentRevision, self).save(*args, **kwargs)

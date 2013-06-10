@@ -13,7 +13,7 @@ from wiki.core.plugins.base import PluginSettingsFormMixin
 
 class SettingsModelChoiceField(forms.ModelChoiceField):
     def label_from_instance(self, obj):
-        return _(u"Receive notifications %(interval)s" % {
+        return _("Receive notifications %(interval)s" % {
                        'interval': obj.get_interval_display()
                    }
                )
@@ -21,7 +21,7 @@ class SettingsModelChoiceField(forms.ModelChoiceField):
 
 class ArticleSubscriptionModelMultipleChoiceField(forms.ModelMultipleChoiceField):
     def label_from_instance(self, obj):
-        return _(u"%(title)s - %(url)s" % {
+        return _("%(title)s - %(url)s" % {
                        'title': obj.article.current_revision.title,
                        'url': obj.article.get_absolute_url()
                    }
@@ -31,23 +31,23 @@ class ArticleSubscriptionModelMultipleChoiceField(forms.ModelMultipleChoiceField
 class SettingsModelForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(SettingsModelForm, self).__init__(*args, **kwargs)
-        import models
+        from . import models
         instance = kwargs.get('instance', None)
         self.__editing_instance = False
         if instance:
             self.__editing_instance = True
             self.fields['delete_subscriptions'] = ArticleSubscriptionModelMultipleChoiceField(
                 models.ArticleSubscription.objects.filter(settings=instance),
-                label=_(u"Remove subscriptions"),
+                label=_("Remove subscriptions"),
                 required=False,
-                help_text=_(u"Select article subscriptions to remove from notifications"),
+                help_text=_("Select article subscriptions to remove from notifications"),
             )
             self.fields['email'] = forms.TypedChoiceField(
-                label=_(u"Email digests"),
+                label=_("Email digests"),
                 choices = (
-                    (0, _(u'Unchanged (selected on each article)')),
-                    (1, _(u'No emails')),
-                    (2, _(u'Email on any change')),
+                    (0, _('Unchanged (selected on each article)')),
+                    (1, _('No emails')),
+                    (2, _('Email on any change')),
                 ),
                 coerce=lambda x: int(x) if not x is None else None,
                 widget=forms.RadioSelect(),
@@ -91,7 +91,7 @@ SettingsFormSet = modelformset_factory(
 
 class SubscriptionForm(PluginSettingsFormMixin, forms.Form):
     
-    settings_form_headline = _(u'Notifications')
+    settings_form_headline = _('Notifications')
     settings_order = 1
     settings_write_access = False
     
@@ -101,11 +101,11 @@ class SubscriptionForm(PluginSettingsFormMixin, forms.Form):
     )
     edit = forms.BooleanField(
         required=False, 
-        label=_(u'When this article is edited')
+        label=_('When this article is edited')
     )
     edit_email = forms.BooleanField(
         required=False, 
-        label=_(u'Also receive emails about article edits'),
+        label=_('Also receive emails about article edits'),
         widget=forms.CheckboxInput(
             attrs={'onclick': mark_safe("$('#id_edit').attr('checked', $(this).is(':checked'));")}
         )

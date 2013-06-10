@@ -32,7 +32,7 @@ def article_for_object(context, obj):
     
     # TODO: This is disabled for now, as it should only fire once per request
     # Maybe store cache in the request object?
-    if True or not obj in _cache.keys():
+    if True or not obj in list(_cache.keys()):
         try:
             article = models.ArticleForObject.objects.get(content_type=content_type, object_id=obj.pk).article
         except models.ArticleForObject.DoesNotExist:
@@ -74,9 +74,9 @@ def get_content_snippet(content, keyword, max_words=30):
     m = p.search(content)
     html = ""
     if m:
-        words = filter(lambda x: x!="", striptags(m.group("before")).replace("\n", " ").split(" "))
+        words = [x for x in striptags(m.group("before")).replace("\n", " ").split(" ") if x!=""]
         before_words = words[-max_words/2:]
-        words = filter(lambda x: x!="", striptags(m.group("after")).replace("\n", " ").split(" "))
+        words = [x for x in striptags(m.group("after")).replace("\n", " ").split(" ") if x!=""]
         after = " ".join(words[:max_words - len(before_words)])
         before = " ".join(before_words)
         html = "%s %s %s" % (before, striptags(keyword), after)

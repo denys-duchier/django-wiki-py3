@@ -4,8 +4,8 @@ from django.utils.translation import ugettext_lazy as _
 from mptt.admin import MPTTModelAdmin
 
 from django import forms
-import models
-import editors
+from . import models
+from . import editors
 
 class ArticleObjectAdmin(GenericTabularInline):
     model = models.ArticleForObject
@@ -69,7 +69,7 @@ class URLPathAdmin(MPTTModelAdmin):
     
     def get_created(self, instance):
         return instance.article.created
-    get_created.short_description = _(u'created')
+    get_created.short_description = _('created')
     
 admin.site.register(models.URLPath, URLPathAdmin)
 admin.site.register(models.Article, ArticleAdmin)

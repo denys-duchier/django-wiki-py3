@@ -1,4 +1,5 @@
 from wiki.conf import settings
+import collections
 
 ###############################
 # ARTICLE PERMISSION HANDLING #
@@ -12,7 +13,7 @@ from wiki.conf import settings
 # settings variable in wiki.conf.settings to a callable(article, user)
 
 def can_read(article, user):
-    if callable(settings.CAN_READ):
+    if isinstance(settings.CAN_READ, collections.Callable):
         return settings.CAN_READ(article, user)
     else:
         # Deny reading access to deleted articles if user has no delete access
@@ -37,7 +38,7 @@ def can_read(article, user):
         return False
         
 def can_write(article, user):
-    if callable(settings.CAN_WRITE):
+    if isinstance(settings.CAN_WRITE, collections.Callable):
         return settings.CAN_WRITE(article, user)
     # Check access for other users...
     if user.is_anonymous() and not settings.ANONYMOUS_WRITE:
@@ -56,17 +57,17 @@ def can_write(article, user):
     return False
 
 def can_assign(article, user):
-    if callable(settings.CAN_ASSIGN):
+    if isinstance(settings.CAN_ASSIGN, collections.Callable):
         return settings.CAN_ASSIGN(article, user)
     return not user.is_anonymous() and user.has_perm('wiki.assign')
 
 def can_assign_owner(article, user):
-    if callable(settings.CAN_ASSIGN_OWNER):
+    if isinstance(settings.CAN_ASSIGN_OWNER, collections.Callable):
         return settings.CAN_ASSIGN_OWNER(article, user)
     return False
 
 def can_change_permissions(article, user):
-    if callable(settings.CAN_CHANGE_PERMISSIONS):
+    if isinstance(settings.CAN_CHANGE_PERMISSIONS, collections.Callable):
         return settings.CAN_CHANGE_PERMISSIONS(article, user)
     return (
         not user.is_anonymous() and (
@@ -76,17 +77,17 @@ def can_change_permissions(article, user):
     )
 
 def can_delete(article, user):
-    if callable(settings.CAN_DELETE):
+    if isinstance(settings.CAN_DELETE, collections.Callable):
         return settings.CAN_DELETE(article, user)
     return not user.is_anonymous() and article.can_write(user)
 
 def can_moderate(article, user):
-    if callable(settings.CAN_MODERATE):
+    if isinstance(settings.CAN_MODERATE, collections.Callable):
         return settings.CAN_MODERATE(article, user)
     return not user.is_anonymous() and user.has_perm('wiki.moderate')
 
 def can_admin(article, user):
-    if callable(settings.CAN_ADMIN):
+    if isinstance(settings.CAN_ADMIN, collections.Callable):
         return settings.CAN_ADMIN(article, user)
     return not user.is_anonymous() and user.has_perm('wiki.admin')
 

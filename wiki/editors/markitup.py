@@ -19,7 +19,7 @@ class MarkItUpAdminWidget(forms.Widget):
     def render(self, name, value, attrs=None):
         if value is None: value = ''
         final_attrs = self.build_attrs(attrs, name=name)
-        return mark_safe(u'<textarea%s>%s</textarea>' % (flatatt(final_attrs),
+        return mark_safe('<textarea%s>%s</textarea>' % (flatatt(final_attrs),
                 conditional_escape(force_unicode(value))))
 
 class MarkItUpWidget(forms.Widget):
@@ -34,7 +34,7 @@ class MarkItUpWidget(forms.Widget):
     def render(self, name, value, attrs=None):
         if value is None: value = ''
         final_attrs = self.build_attrs(attrs, name=name)
-        return mark_safe(u'<div><textarea%s>%s</textarea></div>' % (flatatt(final_attrs),
+        return mark_safe('<div><textarea%s>%s</textarea></div>' % (flatatt(final_attrs),
                 conditional_escape(force_unicode(value))))
 
 class MarkItUp(BaseEditor):

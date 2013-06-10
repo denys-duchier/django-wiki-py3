@@ -406,8 +406,8 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
 
         if not args and not options.get('all_applications', False):
-            print __doc__
+            print(__doc__)
             sys.exit()
     
-        print generate_dot(args, **options)
+        print(generate_dot(args, **options))
 

@@ -15,11 +15,11 @@ from wiki.plugins.notifications.util import get_title
 class ArticleSubscription(ArticlePlugin, Subscription):
     
     def __unicode__(self):
-        title = (_(u"%(user)s subscribing to %(article)s (%(type)s)") % 
+        title = (_("%(user)s subscribing to %(article)s (%(type)s)") % 
                  {'user': self.settings.user.username,
                   'article': self.article.current_revision.title,
                   'type': self.notification_type.label})
-        return unicode(title)
+        return str(title)
     
     class Meta:
         app_label = settings.APP_LABEL
@@ -39,13 +39,13 @@ def post_article_revision_save(**kwargs):
     if kwargs.get('created', False):
         url = default_url(instance.article)
         if instance.deleted:
-            notify(_(u'Article deleted: %s') % get_title(instance), settings.ARTICLE_EDIT,
+            notify(_('Article deleted: %s') % get_title(instance), settings.ARTICLE_EDIT,
                    target_object=instance.article, url=url)
         elif instance.previous_revision:
-            notify(_(u'Article modified: %s') % get_title(instance), settings.ARTICLE_EDIT,
+            notify(_('Article modified: %s') % get_title(instance), settings.ARTICLE_EDIT,
                    target_object=instance.article, url=url)
         else:
-            notify(_(u'New article created: %s') % get_title(instance), settings.ARTICLE_EDIT,
+            notify(_('New article created: %s') % get_title(instance), settings.ARTICLE_EDIT,
                    target_object=instance, url=url)
             
 # Whenever a new revision is created, we notifý users that an article
@@ -67,7 +67,7 @@ for plugin in registry.get_plugins():
                 return
             if kwargs.get('created', False) == notification_dict.get('created', True):
                 url = None
-                if notification_dict.has_key('get_url'):
+                if 'get_url' in notification_dict:
                     url = notification_dict['get_url'](instance)
                 else:
                     url = default_url(notification_dict['get_article'](instance))
