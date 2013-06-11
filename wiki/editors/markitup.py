@@ -1,8 +1,12 @@
 from django import forms
 from django.forms.util import flatatt
-from django.utils.encoding import force_unicode
 from django.utils.html import conditional_escape
 from django.utils.safestring import mark_safe
+
+try:
+    from django.utils.encoding import force_str 
+except ImportError:
+    from django.utils.encoding import force_unicode as force_str 
 
 from wiki.editors.base import BaseEditor
 
@@ -20,7 +24,7 @@ class MarkItUpAdminWidget(forms.Widget):
         if value is None: value = ''
         final_attrs = self.build_attrs(attrs, name=name)
         return mark_safe('<textarea%s>%s</textarea>' % (flatatt(final_attrs),
-                conditional_escape(force_unicode(value))))
+                conditional_escape(force_str(value))))
 
 class MarkItUpWidget(forms.Widget):
     def __init__(self, attrs=None):
@@ -35,7 +39,7 @@ class MarkItUpWidget(forms.Widget):
         if value is None: value = ''
         final_attrs = self.build_attrs(attrs, name=name)
         return mark_safe('<div><textarea%s>%s</textarea></div>' % (flatatt(final_attrs),
-                conditional_escape(force_unicode(value))))
+                conditional_escape(force_str(value))))
 
 class MarkItUp(BaseEditor):
     editor_id = 'markitup'

@@ -9,7 +9,10 @@ from django import forms
 from django.utils.translation import ugettext as _
 from django.utils.safestring import mark_safe
 from django.forms.util import flatatt
-from django.utils.encoding import force_unicode
+try:
+    from django.utils.encoding import force_str
+except ImportError:
+    from django.utils.encoding import force_unicode as force_str
 from django.utils.html import escape, conditional_escape
 
 from itertools import chain
@@ -195,19 +198,19 @@ class SelectWidgetBootstrap(forms.Select):
         return mark_safe('\n'.join(output))
 
     def render_option(self, selected_choices, option_value, option_label):
-        option_value = force_unicode(option_value)
+        option_value = force_str(option_value)
         selected_html = (option_value in selected_choices) and ' selected="selected"' or ''
         return '<li><a href="javascript:void(0)" data-value="%s"%s>%s</a></li>' % (
             escape(option_value), selected_html,
-            conditional_escape(force_unicode(option_label)))
+            conditional_escape(force_str(option_label)))
 
     def render_options(self, choices, selected_choices):
         # Normalize to strings.
-        selected_choices = set([force_unicode(v) for v in selected_choices])
+        selected_choices = set([force_str(v) for v in selected_choices])
         output = []
         for option_value, option_label in chain(self.choices, choices):
             if isinstance(option_label, (list, tuple)):
-                output.append('<li class="divider" label="%s"></li>' % escape(force_unicode(option_value)))
+                output.append('<li class="divider" label="%s"></li>' % escape(force_str(option_value)))
                 for option in option_label:
                     output.append(self.render_option(selected_choices, *option))
             else:

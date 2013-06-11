@@ -20,7 +20,7 @@ def upload_path(instance, filename):
     upload_path = upload_path.replace('%aid', str(instance.plugin.image.article.id))
     if settings.IMAGE_PATH_OBSCURIFY:
         import random, hashlib
-        m=hashlib.md5(str(random.randint(0,100000000000000)))
+        m=hashlib.md5(str(random.randint(0,100000000000000)).encode('utf-8'))
         upload_path = os.path.join(upload_path, m.hexdigest())
     return os.path.join(upload_path, filename)
 
