@@ -75,7 +75,7 @@ def get_content_snippet(content, keyword, max_words=30):
     html = ""
     if m:
         words = [x for x in striptags(m.group("before")).replace("\n", " ").split(" ") if x!=""]
-        before_words = words[-max_words/2:]
+        before_words = words[-max_words//2:]
         words = [x for x in striptags(m.group("after")).replace("\n", " ").split(" ") if x!=""]
         after = " ".join(words[:max_words - len(before_words)])
         before = " ".join(before_words)
@@ -84,7 +84,7 @@ def get_content_snippet(content, keyword, max_words=30):
         html = kw_p.sub(r"<strong>\1</strong>", html)
         html = mark_safe(html)
     else:
-        html = " ".join(filter(lambda x: x!="", striptags(content).replace("\n", " ").split(" "))[:max_words])
+        html = " ".join(list(filter(lambda x: x!="", striptags(content).replace("\n", " ").split(" ")))[:max_words])
     return html
 
 
