@@ -5,8 +5,12 @@ from django.core.exceptions import ImproperlyConfigured
 import warnings
 
 # TODO: Don't use wildcards
-from article import *
-from urlpath import *
+from .article import *
+from .urlpath import *
+
+import sys
+if sys.version_info[0] >= 3:
+    basestring=str
 
 # TODO: Should the below stuff be executed a more logical place?
 

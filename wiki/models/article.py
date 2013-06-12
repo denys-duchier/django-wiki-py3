@@ -15,6 +15,10 @@ from wiki import managers
 from mptt.models import MPTTModel
 from django.core.urlresolvers import reverse
 
+import sys
+if sys.version_info[0] >= 3:
+    unicode=str
+
 class Article(models.Model):
     
     objects = managers.ArticleManager()

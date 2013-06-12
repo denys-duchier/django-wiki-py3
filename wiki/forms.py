@@ -9,7 +9,10 @@ from django import forms
 from django.utils.translation import ugettext as _
 from django.utils.safestring import mark_safe
 from django.forms.util import flatatt
-from django.utils.encoding import force_unicode
+try:
+    from django.utils.encoding import force_unicode
+except ImportError:
+    from django.utils.encoding import force_str as force_unicode
 from django.utils.html import escape, conditional_escape
 
 from itertools import chain

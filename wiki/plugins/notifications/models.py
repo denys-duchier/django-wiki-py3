@@ -12,6 +12,10 @@ from wiki.core.plugins import registry
 from wiki.plugins.notifications import settings
 from wiki.plugins.notifications.util import get_title
 
+import sys
+if sys.version_info[0] >= 3:
+    unicode=str
+
 class ArticleSubscription(ArticlePlugin, Subscription):
     
     def __unicode__(self):
@@ -67,7 +71,7 @@ for plugin in registry.get_plugins():
                 return
             if kwargs.get('created', False) == notification_dict.get('created', True):
                 url = None
-                if notification_dict.has_key('get_url'):
+                if 'get_url' in notification_dict:
                     url = notification_dict['get_url'](instance)
                 else:
                     url = default_url(notification_dict['get_article'](instance))

@@ -23,7 +23,7 @@ class AttachmentForm(forms.ModelForm):
         if uploaded_file:
             try:
                 models.extension_allowed(uploaded_file.name)
-            except IllegalFileExtension, e:
+            except IllegalFileExtension as e:
                 raise forms.ValidationError(e)
         return uploaded_file
 
@@ -79,7 +79,7 @@ class AttachmentArchiveForm(AttachmentForm):
                 for zipinfo in self.zipfile.filelist:
                     try:
                         models.extension_allowed(zipinfo.filename)
-                    except IllegalFileExtension, e:
+                    except IllegalFileExtension as e:
                         raise forms.ValidationError(e)
             except zipfile.BadZipfile:
                 raise forms.ValidationError(_(u"Not a zip file"))

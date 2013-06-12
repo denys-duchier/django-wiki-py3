@@ -49,7 +49,7 @@ def extension_allowed(filename):
     except IndexError:
         # No extension
         raise IllegalFileExtension("No file extension found in filename. That's not okay!")
-    if not extension.lower() in map(lambda x: x.lower(), settings.FILE_EXTENSIONS):
+    if not extension.lower() in [x.lower() for x in settings.FILE_EXTENSIONS]:
         raise IllegalFileExtension("The following filename is illegal: %s. Extension has to be one of %s" % 
                                    (filename, ", ".join(settings.FILE_EXTENSIONS)))
     
@@ -132,7 +132,9 @@ class AttachmentRevision(BaseRevisionMixin, models.Model):
                 previous_revision = self.attachment.attachmentrevision_set.latest()
                 self.revision_number = previous_revision.revision_number + 1
             # NB! The above should not raise the below exception, but somehow it does.
-            except AttachmentRevision.DoesNotExist, Attachment.DoesNotExist:
+            except AttachmentRevision.DoesNotExist:
+                self.revision_number = 1
+            except Attachment.DoesNotExist:
                 self.revision_number = 1
         
         super(AttachmentRevision, self).save(*args, **kwargs)

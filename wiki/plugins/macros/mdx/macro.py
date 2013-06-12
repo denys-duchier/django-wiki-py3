@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 import markdown
 import re
+import sys
+if sys.version_info[0] >= 3:
+    basestring=str
 
 from django.utils.translation import ugettext as _
 from django.template.loader import render_to_string

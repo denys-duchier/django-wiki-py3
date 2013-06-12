@@ -15,14 +15,14 @@ def get_module(app, modname, verbose, failfast):
     module_name = '%s.%s' % (app, modname)
     try:
         module = import_module(module_name)
-    except ImportError, e:
+    except ImportError as e:
         if failfast:
             raise e
         elif verbose:
-            print "Could not load %r from %r: %s" % (modname, app, e)
+            print("Could not load %r from %r: %s" % (modname, app, e))
         return None
     if verbose:
-        print "Loaded %r from %r" % (modname, app)
+        print("Loaded %r from %r" % (modname, app))
     return module
 
 def load(modname, verbose=False, failfast=False):

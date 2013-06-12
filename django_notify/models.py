@@ -2,6 +2,12 @@
 from django.db import models
 from django.db.models import Q
 from django.utils.translation import ugettext_lazy as _
+import sys
+if sys.version_info[0] >= 3:
+    PY3 = True
+    unicode=str
+else:
+    PY3 = False
 
 from django.contrib.contenttypes.models import ContentType
 
@@ -28,7 +34,7 @@ class NotificationType(models.Model):
     
     def __unicode__(self):
         return self.key
-    
+
     class Meta:
         db_table = settings.DB_TABLE_PREFIX + '_notificationtype'
         verbose_name = _(u'type')

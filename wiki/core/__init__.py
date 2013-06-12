@@ -2,6 +2,9 @@ import markdown
 
 from wiki.core.plugins import registry as plugin_registry
 from wiki.conf import settings
+import sys
+if sys.version_info[0] >= 3:
+    unicode=str
 
 
 class ArticleMarkdown(markdown.Markdown):

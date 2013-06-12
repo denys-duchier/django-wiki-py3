@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
 from django.utils.importlib import import_module
+import sys
+if sys.version_info[0] >= 3:
+    basestring=str
 
 _cache = {}
 _settings_forms = []
@@ -12,7 +15,7 @@ def register(PluginClass):
     Register a plugin class. This function will call back your plugin's
     constructor.
     """
-    if PluginClass in _cache.keys():
+    if PluginClass in _cache:
         raise Exception("Plugin class already registered")
     plugin = PluginClass()
     _cache[PluginClass] = plugin

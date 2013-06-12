@@ -31,7 +31,7 @@ class ArticleSubscriptionModelMultipleChoiceField(forms.ModelMultipleChoiceField
 class SettingsModelForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(SettingsModelForm, self).__init__(*args, **kwargs)
-        import models
+        from . import models
         instance = kwargs.get('instance', None)
         self.__editing_instance = False
         if instance:

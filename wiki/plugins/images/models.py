@@ -5,7 +5,15 @@ from django.core.exceptions import ImproperlyConfigured
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
-import settings
+from . import settings
+import sys
+if sys.version_info[0] >= 3:
+    unicode=str
+    def encode_utf8(x):
+        return x.encode('utf-8')
+else:
+    def encode_utf8(x):
+        return x
 
 from wiki.models.pluginbase import RevisionPlugin, RevisionPluginRevision
 from django.db.models import signals
@@ -20,7 +28,7 @@ def upload_path(instance, filename):
     upload_path = upload_path.replace('%aid', str(instance.plugin.image.article.id))
     if settings.IMAGE_PATH_OBSCURIFY:
         import random, hashlib
-        m=hashlib.md5(str(random.randint(0,100000000000000)))
+        m=hashlib.md5(encode_utf8(str(random.randint(0,100000000000000))))
         upload_path = os.path.join(upload_path, m.hexdigest())
     return os.path.join(upload_path, filename)
 

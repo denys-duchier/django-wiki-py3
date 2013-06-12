@@ -83,7 +83,7 @@ class URLPath(MPTTModel):
     def path(self):
         if not self.parent: return ""
         
-        ancestors = filter(lambda ancestor: ancestor.parent is not None, self.cached_ancestors)
+        ancestors = [ancestor for ancestor in self.cached_ancestors if ancestor.parent is not None]
         slugs = [obj.slug if obj.slug else "" for obj in ancestors + [self] ]
         
         return "/".join(slugs) + "/"
@@ -108,7 +108,7 @@ class URLPath(MPTTModel):
         """
         try:
             for descendant in self.get_descendants(include_self=True).order_by("-level"):
-                print "deleting " , descendant
+                print("deleting " , descendant)
                 descendant.article.delete()
             
             transaction.commit()
